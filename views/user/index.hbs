@@ -1,0 +1,12 @@
+<div class="text-center mt-5">
+    <h1>You Are Successfully Logged In</h1>
+
+    <button class="btn btn-danger" onclick="logout()">Log Out</button>
+</div> 
+
+<script>
+    const logout= ()=>{
+       document.cookie = "Accesstoken = "
+       window.location = "/login"
+    }
+</script>

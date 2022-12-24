@@ -1,0 +1,182 @@
+<link rel="stylesheet" href="../../stylesheets/admin/admin.css" />
+
+<button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addUser">Add User</button>
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each users}}
+    <tr>
+      <th scope="row">{{this.user_id}}</th>
+      <td>{{this.user_name}}</td>
+      <td>{{this.user_email}}</td>
+      <td>
+        <div class="btn-group">
+          <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            Actions
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#"
+                onclick="viewUser('{{this.user_email}}','{{this.user_name}}','{{this.user_status}}')"
+                data-bs-toggle="modal" data-bs-target="#viewUserModal">View</a></li>
+            <li><a class="dropdown-item" href="#"
+                onclick="showEditUserModal('{{this.user_email}}','{{this.user_name}}')" data-bs-toggle="modal"
+                data-bs-target="#editUserModal">Edit</a></li>
+            <li><a class="dropdown-item" href="#" onclick="deleteUser('{{this.user_email}}')">Delete</a></li>
+
+          </ul>
+        </div>
+      </td>
+    </tr>
+
+
+
+    </div>
+    {{/each}}
+  </tbody>
+</table>
+
+
+
+
+<!-- Modal For View -->
+<div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" readonly class="form-control" id="username" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" readonly class="form-control" id="email" aria-describedby="emailHelp"
+              value="{{this.user_email}}">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <input type="text" readonly class="form-control" id="status" aria-describedby="emailHelp"
+              placeholder="Enter email">
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal For Edit -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">User Edit</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form class="edit-form">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" readonly class="form-control" id="editEmail" aria-describedby="emailHelp"
+              value="{{this.user_email}}">
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" class="form-control" id="editUsername">
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-text mt-3">
+              <input class="form-check-input mt-0" type="checkbox" value="true" onclick="showPassword()"
+                id="show-password">
+              <label for="" class="ms-3">Change Password ?</label>
+            </div>
+
+            <div class="d-flex mt-2 ">
+              <div class="form-group me-3" hidden id="password-container">
+                <label>New Password</label>
+                <input type="text" id="password" class="form-control" required>
+              </div>
+              <div class="form-group" hidden id="confirm-password-container">
+                <label>Confirm Password</label>
+                <input type="text" id="confirm-password" class="form-control" required>
+                <p hidden id="notMatch" class="text-danger">Password Not Same</p>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" type="submit" onclick="editUser()">Save changes</button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+{{!-- Add User Modal --}}
+
+<div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">User Edit</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form class="edit-form" id="addForm">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" required   class="form-control" id="addEmail" aria-describedby="emailHelp">
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" required class="form-control" id="addUsername">
+          </div>
+
+          <div class="input-group mb-3">
+
+            <div class="d-flex mt-2 ">
+              <div class="form-group me-3"  id="password-container">
+                <label>Password</label>
+                <input type="text" id="addPassword" class="form-control" required>
+              </div>
+              <div class="form-group"  id="confirm-password-container">
+                <label>Confirm Password</label>
+                <input type="text" id="addConfirmPassword" class="form-control" required>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button  class="btn btn-primary" type="submit" >Add User</button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="../../javascripts/admin/admin.js"></script>
